@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom styles can be added here */
+        .flash-container {
+            margin: 20px 0;
+        }
+
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .alert-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+
+        h1 {
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .registration-button {
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        body {
+            padding-top: 56px; /* Height of the navbar */
+        }
+
+        button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/dashboard">Your Dashboard</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- <form class="form-inline ml-auto">
+                    <input class="form-control mr-sm-2" type="text" name="query" placeholder="Search...">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form> -->
+            </div>
+        </div>
+        <a href="/logout" class="btn btn-outline-danger ml-2"> <i class="fas fa-sign-out-alt logout-icon"></i>LOGOUT</a>
+    </nav>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-container">
+            {% for category, message in messages %}
+                <div class="alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+    <h1>DELETE THE ALBUM</h1>
+    <form action="/delete_album/{{user.id}}" method="post">
+        <label for = "album">Select Album</label>
+        <select name = "album_id" id ="album">
+            {%for a in album%}
+                {% if user.id == a.user_id %}
+                    <option value="{{a.id}}">{{a.name}}</option>
+                {% endif %}
+            {%endfor%}
+
+
+        </select>
+        <input type="submit" value="DELETE">
+    </form>
+
+</body>
+</html>

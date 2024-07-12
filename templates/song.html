@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Songs</title>
+</head>
+<body>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-container">
+            {% for category, message in messages %}
+                <div class="alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+    
+    <h1>SONGS</h1>
+
+    {% if song|length == 0 %}
+        <h1>NO Songs Found</h1>
+    {% else %}
+        <table>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Artist</th>
+                <th>Genre</th>
+                <th>Ratings</th>
+                <th>Action</th>
+                <th>Rate Song</th> <!-- New column for the rating form -->
+            </tr>
+            {% for song in song %}
+                <tr>
+                    <td>{{song.id}}</td>
+                    <td>{{song.title}}</td>
+                    <td>{{song.artist}}</td>
+                    <td>{{song.genre}}</td>
+                    <td>{{song.rating}}</td>
+                    <td><a href="/lyrics/{{song.id}}">Lyrics</a></td>
+                    <td>
+                        <!-- Song Rating Form for each song -->
+                        <form action="/rating/{{song.id}}" method="post">
+                            <div class="rating">
+                                <input type="radio" id="star1_{{ song.id }}" name="rating" value="1" required /><label class="star" for="star1">&#9733;</label>
+                                <input type="radio" id="star2_{{ song.id }}" name="rating" value="2" required /><label class="star" for="star2">&#9733;</label>
+                                <input type="radio" id="star3_{{ song.id }}" name="rating" value="3" required /><label class="star" for="star3">&#9733;</label>
+                                <input type="radio" id="star4_{{ song.id }}" name="rating" value="4" required /><label class="star" for="star4">&#9733;</label>
+                                <input type="radio" id="star5_{{ song.id }}" name="rating" value="5" required /><label class="star" for="star5">&#9733;</label>
+                            </div>
+                            <input type="submit" value="Submit Rating">
+                        </form>
+                        
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    <a href="{{ url_for('playlist') }}"> <button>Your Playlist</button></a>
+    <a href='/user_dashboard'>Go Back</a>
+
+</body>
+</html>

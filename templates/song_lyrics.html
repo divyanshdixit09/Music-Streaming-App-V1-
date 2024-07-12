@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lyrics</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom styles can be added here */
+        body {
+            padding-top: 56px; /* Height of the navbar */
+        }
+
+        .navbar {
+            padding: 1rem;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .form-inline {
+            margin-top: 5px;
+        }
+
+        .registration-button {
+            margin-left: 10px;
+        }
+
+        .flash-container {
+            margin-top: 20px;
+        }
+
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .alert-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+
+        .container {
+            margin-top: 4rem;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        a.btn-go-back {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        a.btn-go-back:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <!-- Bootstrap Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/dashboard">Your Dashboard</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <form class="form-inline ml-auto">
+                    <input class="form-control mr-sm-2" type="text" name="query" placeholder="Search...">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+                {%if user.role == user%}
+                <span class="registration-button ml-2">
+                    <a href="/creator/{{user.id}}" class="btn btn-primary" >Register as Creator</a>
+                </span>
+                {%endif%}
+            </div>
+        </div>
+        <a href="/logout" class="btn btn-outline-danger ml-2">LOGOUT</a>
+    </nav>
+    
+    <div class="container mt-4">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-container">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+
+        {% if song|length == 0 %}
+            <h1 class="text-danger">NO lyrics Found for {{ c.title }}</h1>
+        {% else %}
+            <h1 class="text-success">Lyrics for {{ c.title }}</h1>
+            <table>
+                {% for song in song %}
+                    {% if c.id == song.id %}
+                        {{ song.text }}
+                    {% endif %}
+                {% endfor %}
+            </table>
+        {% endif %}
+        
+        <div>
+            <a href="/dashboard" class="btn-go-back">Go Back</a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js (required for some Bootstrap components) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

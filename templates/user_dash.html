@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-....." crossorigin="anonymous" />
+
+    <title>Your Dashboard</title>
+    <style>
+        /* Your custom styles can go here if needed */
+        .flash-container {
+            margin-bottom: 1rem;
+        }
+   
+        .card {
+            transition: transform 0.3s;
+            background-color: #e1f7f3; 
+            border: 1px solid #dee2e6;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            color: #092246; 
+        }
+
+        .card-text {
+            color: #495057;
+        }
+
+        .btn-info {
+            background-color: #17a2b8 !important; 
+            border-color: #17a2b8 !important; 
+        }
+    
+        
+        .flash-container {
+            margin: 20px 0;
+        }
+
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .alert-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+
+        h1 {
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .registration-button {
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        body {
+            padding-top: 56px; 
+        }
+
+        button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/dashboard">Your Dashboard</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <form class="form-inline ml-auto" action ="/search" method = "post">
+                    <input class="form-control mr-sm-2" type="text" name="query" placeholder="Search...">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fas fa-search search-icon"></i>Search</button>
+                </form>
+                <span class="registration-button ml-2">
+                    <a href="/creator/{{user.id}}" class="btn btn-primary" onclick="return confirm('Are you sure you want to register as a creator?')"><i class="fas fa-user-plus register-icon"></i>Register as Creator</a>
+                </span>
+            </div>
+        </div>
+        <a href="/logout" class="btn btn-outline-danger ml-2" onclick="return confirm('Are you sure you want to logout?')"><i class="fas fa-sign-out-alt logout-icon"></i>LOGOUT</a>
+    </nav>
+    
+<div class="container mt-4">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-container">
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    {% if results %}
+    <h2>Search Results for {{query}}</h2>
+    {% if results|length == 0 %}
+        <h1 class="mt-5">NO Songs Found</h1>
+    {% else %}
+        <div class="row">
+            {% for song in results %}
+            {%if song.flag==False%}
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <a href="/play"><h5 class="card-title">{{ song.title }}</h5></a>
+                            <p class="card-text">
+                                <strong>Artist:</strong> {{ song.artist }}<br>
+                                <strong>Genre:</strong> {{ song.genre }}<br>
+                                <strong>Ratings:</strong> {{ song.rating }}
+                            </p>
+                            <a href="/lyrics/{{ song.id }}" class="btn btn-info">Lyrics</a>
+                            <form action="/rating/{{ song.id }}" method="post" class="mt-2">
+                                <div class="rating">
+                                    <input type="radio" id="star1_{{ song.id }}" name="rating" value="1" required /><label for="star1_{{ song.id }}"></label>
+                                    <input type="radio" id="star2_{{ song.id }}" name="rating" value="2" required /><label for="star2_{{ song.id }}"></label>
+                                    <input type="radio" id="star3_{{ song.id }}" name="rating" value="3" required /><label for="star3_{{ song.id }}"></label>
+                                    <input type="radio" id="star4_{{ song.id }}" name="rating" value="4" required /><label for="star4_{{ song.id }}"></label>
+                                    <input type="radio" id="star5_{{ song.id }}" name="rating" value="5" required /><label for="star5_{{ song.id }}"></label>
+                                </div>
+                                <input type="submit" value="Submit Rating" class="btn btn-outline-success my-2 my-sm-0">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {%endif%}
+            {% endfor %}
+        </div>
+    {% endif %}
+    {%else%}
+    {% if song|length == 0 %}
+        <h1 class="mt-5">NO Songs Found</h1>
+    {% else %}
+        <div class="row">
+            {% for song in song %}
+            {%if song.flag==False%}
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <a href="/play"><h5 class="card-title" >{{ song.title }}</h5></a>
+                            <p class="card-text">
+                                <strong>Artist:</strong> {{ song.artist }}<br>
+                                <strong>Genre:</strong> {{ song.genre }}<br>
+                                <strong>Ratings:</strong> {{ song.rating }}
+                            </p>
+                            <a href="/lyrics/{{ song.id }}" class="btn btn-info">Lyrics</a>
+                            <form action="/rating/{{ song.id }}" method="post" class="mt-2">
+                                <div class="rating">
+                                    <input type="radio" id="star1_{{ song.id }}" name="rating" value="1" required /><label for="star1_{{ song.id }}"></label>
+                                    <input type="radio" id="star2_{{ song.id }}" name="rating" value="2" required /><label for="star2_{{ song.id }}"></label>
+                                    <input type="radio" id="star3_{{ song.id }}" name="rating" value="3" required /><label for="star3_{{ song.id }}"></label>
+                                    <input type="radio" id="star4_{{ song.id }}" name="rating" value="4" required /><label for="star4_{{ song.id }}"></label>
+                                    <input type="radio" id="star5_{{ song.id }}" name="rating" value="5" required /><label for="star5_{{ song.id }}"></label>
+                                </div>
+                                <input type="submit" value="Submit Rating" class="btn btn-outline-success my-2 my-sm-0">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {%endif%}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <section id="albums">
+        <h1>SUGGESTED ALBUMS:</h1>
+        {% if album|length == 0 %}
+            <h1 class="mt-5">NO Albums Found</h1>
+        {% else %}
+            <div class="row">
+                {% for a in album %}
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ a.name }}</h5>
+                                {%for k in king%}
+                                {%if a.user_id == k.id%}
+                                <p class="card-text">
+                                    <strong>Artist:</strong> {{ k.username }}<br>
+                                </p>
+                                {%endif%}
+                                {%endfor%}
+                                <!-- Add any additional album-related content here -->
+                                <a href="/album_details/{{ a.id }}" class="btn btn-info">Details</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </section>
+    {%endif%}
+
+
+    <h4 class="mt-4"><a href="{{ url_for('playlist') }}" class="btn btn-secondary">Your Playlist</a></h4>
+</div>
+
+<!-- Bootstrap JS and Popper.js (required for some Bootstrap components) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

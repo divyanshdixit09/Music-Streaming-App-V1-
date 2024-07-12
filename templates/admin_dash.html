@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-....." crossorigin="anonymous" />
+
+    <style>
+        body {
+            padding-top: 56px;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        .card {
+            margin-bottom: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+        }
+
+        .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            font-weight: bold;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .btn-outline-danger {
+            margin-left: 10px;
+        }
+
+        .table {
+            margin-top: 20px;
+        }
+
+        /* Style for the graphs */
+        .graph-img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/dashboard">Admin Dashboard</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <form class="form-inline ml-auto" action="/search" method="post">
+                    <input class="form-control mr-sm-2" type="text" name="query" placeholder="Search...">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fas fa-search search-icon"></i>Search</button>
+                </form>
+            </div>
+        </div>
+        <a href="/logout" class="btn btn-outline-danger ml-2" onclick="return confirm('Are you sure you want to logout?')"><i class="fas fa-sign-out-alt logout-icon"></i>LOGOUT</a>
+    </nav>
+
+    <div class="container">
+       
+        <div class="card">
+            <div class="card-header">
+                App Statistics
+            </div>
+            <div class="card-body">
+                <p class="card-text">Total Users: {{user_count}}</p>
+                <p class="card-text">Total Creators: {{creator_count}}</p>
+                <p class="card-text">Total Songs: {{song_count}}</p>
+                <p class="card-text">Total Album: {{album_count}}</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                Song Performance
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">S.No</th>
+                            <th scope="col">Song Name</th>
+                            <th scope="col">Current Rating</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for song in top_song %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ song.title }}</td>  
+                                <td>{{ song.rating}}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <img src="../static/BarGraph.jpeg" class="img-fluid graph-img" alt="Bar Graph">
+                <img src="../static/PieChart.jpeg" class="img-fluid graph-img" alt="Pie Chart">
+            </div>
+        </div>
+
+        <a href="/management" class="btn btn-info">Management</a>
+    </div>
+
+</body>
+</html>

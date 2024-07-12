@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Songs</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-....." crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom styles can be added here */
+        .flash-container {
+            margin: 20px 0;
+        }
+
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .alert-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+
+        h1 {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        table th, table td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .registration-button {
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        body {
+            padding-top: 56px; /* Height of the navbar */
+        }
+
+        button {
+            margin-top: 10px;
+        }
+
+        .btn-custom {
+            margin-top: 5px;
+        }
+
+        .btn-custom a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .btn-custom a:hover {
+            color: #fff;
+            text-decoration: none;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/dashboard">Your Dashboard</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- <form class="form-inline ml-auto">
+                    <input class="form-control mr-sm-2" type="text" name="query" placeholder="Search...">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form> -->
+            </div>
+        </div>
+        <a href="/logout" class="btn btn-outline-danger ml-2"> <i class="fas fa-sign-out-alt logout-icon"></i>LOGOUT</a>
+    </nav>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-container">
+            {% for category, message in messages %}
+                <div class="alert-{{ category }} alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+    
+    <div class="container">
+        <h1>UPLOADED SONGS</h1>
+        {% if song|length == 0 %}
+            <h1>NO Songs Found</h1>
+        {% else %}
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Artist</th>
+                        <th>Genre</th>
+                        <th>Ratings</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in song %}
+                        {% if s.creator_id|int == user_id %}
+                        {%if s.flag==False%}
+                            <tr>
+                                <td>{{ s.title }}</td>
+                                <td>{{ s.artist }}</td>
+                                <td>{{ s.genre }}</td>
+                                <td>{{ s.rating }}</td>
+                                <td>
+                                    <a href="/lyrics/{{ s.id }}" class="btn btn-primary btn-custom">Lyrics</a>
+                                    <a href="/edit_song/{{ s.id }}" class="btn btn-warning btn-custom">Update Song</a>
+                                    <a href="/delete_song/{{ s.id }}" class="btn btn-danger btn-custom" onclick="return confirm('Are you sure you want to Delete?')"><i class="fas fa-trash-alt"></i> DELETE</a>
+                                </td>
+                            </tr>
+                        {%else%}
+                        <h6 class="alert-danger">{{s.title}} has been flagged cause it breached companies policy</h6>
+                        {%endif%}
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        <a href="/upload_song" class="btn btn-success btn-custom">UPLOAD SONG</a>
+        <a href="/dashboard" class="btn btn-secondary btn-custom">Go Back</a>
+        
+    </div>
+    
+    <!-- Bootstrap JS and Popper.js (required for some Bootstrap components) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

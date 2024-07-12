@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom styles can be added here */
+        .flash-container {
+            margin: 20px 0;
+        }
+
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .alert-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+
+        h1 {
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .registration-button {
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        body {
+            padding-top: 56px; /* Height of the navbar */
+        }
+
+        button {
+            margin-top: 10px;
+        }
+
+        .song-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .song-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .remove-button {
+            margin-left: 10px;
+        }
+
+        .go-back-button {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Bootstrap Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/dashboard">Your Dashboard</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <form class="form-inline ml-auto">
+                    <input class="form-control mr-sm-2" type="text" name="query" placeholder="Search...">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fas fa-search search-icon"></i>Search</button>
+                </form>
+                {%if user.role == "user" %}
+                <span class="registration-button ml-2">
+                    <a href="/creator/{{user.id}}" class="btn btn-primary"><i class="fas fa-user-plus register-icon"></i>Register as Creator</a>
+                </span>
+                {% endif %}
+            </div>
+        </div>
+        <a href="/logout" class="btn btn-outline-danger ml-2" onclick="return confirm('Are you sure you want to logout?')"><i class="fas fa-sign-out-alt logout-icon"></i>LOGOUT</a>
+    </nav>
+    
+    <div class="container mt-4">
+        <h1>Songs</h1>
+        {% for s in p.songs %}
+        {%if s.flag==False%}
+            <div class="song-title">
+                <h1>{{s.title}}</h1>
+                <div class="song-actions">
+                    <a href="/remove_song/{{s.id}}" class="btn btn-danger remove-button">REMOVE <i class="fas fa-trash-alt"></i></a>
+                </div>
+            </div>
+        {%endif%}
+        {% endfor %}
+        <a href="/playlist" class="btn btn-secondary go-back-button">Go Back</a>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js (required for some Bootstrap components) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

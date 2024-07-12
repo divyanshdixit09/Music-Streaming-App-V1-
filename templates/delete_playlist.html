@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-container">
+            {% for category, message in messages %}
+                <div class="alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+    <h1>DELETE THE PLAYLIST</h1>
+    <form action="/delete_playlist/{{user.id}}" method="post">
+        <label for = "playlist">Select Playlist</label>
+        <select name = "playlist_id" id ="playlist">
+            {%for p in playlist%}
+                {% if user.id == p.user_id %}
+                    <option value="{{p.id}}">{{p.name}}</option>
+                {% endif %}
+            {%endfor%}
+
+
+        </select>
+        <input type="submit" value="DELETE">
+    </form>
+
+</body>
+</html>

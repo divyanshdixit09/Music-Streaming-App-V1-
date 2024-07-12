@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Song</title>
+   
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-....." crossorigin="anonymous" />
+
+    <style>
+      
+        body {
+            padding-top: 55px; 
+        }
+
+        .navbar {
+            padding: 1rem;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .form-inline {
+            margin-top: 5px;
+        }
+
+        .flash-container {
+            margin-top: 20px;
+        }
+
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .container {
+            margin-top: 4rem;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 8px;
+        }
+
+        input[type="submit"] {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <!-- Bootstrap Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/dashboard">Your Dashboard</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- <form class="form-inline ml-auto">
+                    <input class="form-control mr-sm-2" type="text" name="query" placeholder="Search...">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form> -->
+            </div>
+        </div>
+        <a href="/logout" class="btn btn-outline-danger ml-2"> <i class="fas fa-sign-out-alt logout-icon"></i>LOGOUT</a>
+    </nav>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="container flash-container">
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+
+    <div class="container mt-4">
+        <h1>Upload Song</h1>
+        <form action="/upload_song" method="post">
+            <label for="title">Song Title:</label>
+            <input type="text" id="title" name="title" class="form-control" required>
+
+            <label for="artist">Song Artist:</label>
+            <input type="text" id="artist" name="artist" class="form-control" value={{user.username}} required>
+
+            <label for="genre">Song Genre:</label>
+            <input type="text" id="genre" name="genre" class="form-control" required>
+
+            <label for="text">Song Lyrics:</label>
+            <input type="text" id="text" name="text" class="form-control" required>
+            
+            
+            <input type="submit" value="+ Upload" class="btn btn-primary">
+        </form>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js (required for some Bootstrap components) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
